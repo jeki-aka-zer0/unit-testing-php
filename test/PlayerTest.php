@@ -7,44 +7,54 @@ use PHPUnit\Framework\TestCase;
 
 class PlayerTest extends TestCase
 {
+    /**
+     * @var Player
+     */
+    private $player;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->player = new Player('Vasya');
+    }
+
     public function testJoinGameShouldSuccessWhenPlayerIsNotInGame(): void
     {
-        $player = new Player('Vasya');
         $game = new Game();
-        $player->joins($game);
 
-        static::assertEquals($game, $player->activeGame());
+        $this->player->joins($game);
+
+        static::assertEquals($game, $this->player->activeGame());
     }
 
     public function testJoinGameShouldFailWhenPlayerAlreadyInGame(): void
     {
-        $player = new Player('Vasya');
         $game = new Game();
-        $player->joins($game);
+        $this->player->joins($game);
 
         $this->expectException(CasinoGameException::class);
         $this->expectExceptionMessage('Player must leave the current game before joining another game');
-        $player->joins($game);
+        $this->player->joins($game);
     }
 
     public function testPlayerCanByuChips(): void
     {
-        $player = new Player('Vasya');
         $chips1 = 1;
         $chips2 = 2;
-        $player->buy($chips1);
-        $player->buy($chips2);
+        $this->player->buy($chips1);
 
-        self::assertEquals($chips1 + $chips2, $player->getAvailableChips());
+        $this->player->buy($chips2);
+
+        self::assertEquals($chips1 + $chips2, $this->player->getAvailableChips());
     }
 
     public function testPlayerCantByuNegativeAmountOfChips(): void
     {
-        $player = new Player('Vasya');
         $chips = -1;
 
         $this->expectException(CasinoGameException::class);
         $this->expectExceptionMessage('Buying negative numbers is not allowed');
-        $player->buy($chips);
+        $this->player->buy($chips);
     }
 }
