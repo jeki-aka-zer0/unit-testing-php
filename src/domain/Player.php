@@ -8,6 +8,13 @@ class Player
 
     private $activeGame;
 
+    private $id;
+
+    public function __construct(string $id)
+    {
+        $this->id = $id;
+    }
+
     function activeGame()
     {
         return $this->activeGame;
@@ -62,5 +69,10 @@ class Player
 
     function lose()
     {
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

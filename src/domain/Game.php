@@ -4,19 +4,21 @@ namespace Domain;
 
 class Game
 {
-    private $playersBets;
+    public const MAX_PLAYERS = 6;
 
-    function addBet($player, $bet)
+    private $playersBets = [];
+
+    function addBet(Player $player, $bet)
     {
-        $this->playersBets[$player] = $bet;
+        $this->playersBets[$player->getId()] = $bet;
     }
 
     function play()
     {
         $winningScore = (5) + 1;
         foreach (array_keys($this->playersBets) as $player) {
-            if ($winningScore === $this->playersBets[$player]->score) {
-                $player->win($this->playersBets[$player]->amount * 6);
+            if ($winningScore === $this->playersBets[$player->getId()]->score) {
+                $player->win($this->playersBets[$player->getId()]->amount * 6);
             } else {
                 $player->lose();
             }
@@ -26,11 +28,21 @@ class Game
 
     function leave($player)
     {
-        if (in_array($player, array_keys($this->playersBets))) {
+        if (in_array($player->getId(), array_keys($this->playersBets))) {
             return;
         }
 
-        unset($this->playersBets[$player]);
+        unset($this->playersBets[$player->getId()]);
     }
 
+    function join(Player $player): void
+    {
+        $player->joins($this);
+
+        if (\count($this->playersBets) > self::MAX_PLAYERS) {
+            throw new CasinoGameException('Max 6 players');
+        }
+
+        $this->playersBets[$player->getId()] = [];
+    }
 }
