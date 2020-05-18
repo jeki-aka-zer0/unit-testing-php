@@ -1,8 +1,8 @@
 <?php
 
-use Domain\Player;
+use PHPUnit\Framework\TestCase;
 
-class GameTest extends \PHPUnit\Framework\TestCase
+class GameTest extends TestCase
 {
     public function testTrue()
     {

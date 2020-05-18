@@ -1,6 +1,8 @@
 <?php
 
-class RollDiceGame
+namespace Domain;
+
+class Game
 {
     private $playersBets;
 
